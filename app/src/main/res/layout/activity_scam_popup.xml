@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#1f0d11"
+    android:padding="20dp">
+
+    <!-- Siren Icon & Title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚨"
+            android:textSize="28sp"
+            android:layout_marginEnd="10dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/popup_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SCAM ALERT DETECTED"
+                android:textColor="#ff4757"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ScamGuard Real-Time Sentinel"
+                android:textColor="#fca5a5"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Source Pill -->
+    <TextView
+        android:id="@+id/popup_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="💬 Intercepted Inbound SMS"
+        android:textColor="#fca5a5"
+        android:background="#33ef4444"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Threat Badge -->
+    <TextView
+        android:id="@+id/popup_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔴 DANGEROUS SCAM (95/100)"
+        android:textColor="#ff6b6b"
+        android:background="#40ef4444"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Quote Box -->
+    <TextView
+        android:id="@+id/popup_message_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Message body..."
+        android:textColor="#ffe4e6"
+        android:background="#40000000"
+        android:padding="12dp"
+        android:textSize="14sp"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Why fake Box -->
+    <TextView
+        android:id="@+id/popup_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Why this is fake..."
+        android:textColor="#fef08a"
+        android:background="#20f59e0b"
+        android:padding="10dp"
+        android:textSize="12sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Actions -->
+    <Button
+        android:id="@+id/btn_popup_vault"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🚩 Keep Marked in Scam Vault"
+        android:backgroundTint="#ef4444"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_popup_sos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🚨 Call 1930 Cyber Helpline"
+        android:backgroundTint="#00f0ff"
+        android:textColor="#051329"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_popup_dismiss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="✕ Dismiss Alert"
+        android:backgroundTint="#33ffffff"
+        android:textColor="#cbd5e1" />
+
+</LinearLayout>

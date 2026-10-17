@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScamGuard 360</string>
+    <color name="primary">#00F0FF</color>
+    <color name="background">#0A0E17</color>
+    <style name="Theme.ScamGuard" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#0A0E17</item>
+        <item name="android:navigationBarColor">#111827</item>
+    </style>
+</resources>

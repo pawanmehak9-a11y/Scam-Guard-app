@@ -1,0 +1,19 @@
+{
+  "name": "ScamGuard 360 - Anti-Scam Shield",
+  "short_name": "ScamGuard",
+  "description": "Real-time AI Anti-Scam & Phishing Defense for Phone Calls, Messages, and Websites.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#00f0ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "security", "lifestyle"]
+}

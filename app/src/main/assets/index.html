@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ScamGuard 360 | Anti-Scam Shield for You & Your Family</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="logo-container" onclick="switchTab('tab-msg')">
+      <div class="logo-icon">🛡️</div>
+      <div class="logo-text">
+        <h1>ScamGuard 360</h1>
+        <p>🟢 Active Protection</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Marked Scams Vault Quick Access -->
+      <button class="btn-share-header" onclick="switchTab('tab-vault')" title="View Marked Scams Vault" style="border-color: rgba(239, 68, 68, 0.45); color: #ff6b6b;">
+        🚩 Scams <span class="vault-badge-pill" id="vault-badge-header">0</span>
+      </button>
+
+      <!-- 1-Tap SOS Helpline 1930 -->
+      <a href="tel:1930" class="btn-sos" title="Call National Cyber Fraud Helpline">
+        🚨 Call 1930
+      </a>
+
+      <!-- Share with Family & Friends -->
+      <button class="btn-share-header" onclick="openShareModal()">
+        📲 Share App
+      </button>
+
+      <!-- Emergency Siren Toggle -->
+      <button class="siren-toggle-btn active" id="siren-btn" onclick="toggleSiren()">
+        🔊 Sound ON
+      </button>
+    </div>
+  </header>
+
+  <!-- Global Alert Banner for Severe Scams -->
+  <div style="max-width: 1200px; width: 100%; margin: 1rem auto 0 auto; padding: 0 1.25rem;">
+    <div id="global-alert-banner" class="alert-banner">
+      <div class="alert-banner-content">
+        <div class="alert-banner-icon">🚨</div>
+        <div class="alert-banner-text">
+          <h4 id="banner-title">CRITICAL SCAM DETECTED</h4>
+          <p id="banner-desc">Do not send money, do not share OTP, and do not click any links.</p>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="generateReport()" style="padding: 0.45rem 0.9rem; font-size: 0.8rem;">
+        Draft Complaint
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-target="tab-msg">
+      💬 Check a Message
+    </button>
+    <button class="tab-btn" data-target="tab-call">
+      📞 Check a Phone Call
+    </button>
+    <button class="tab-btn" data-target="tab-url">
+      🌐 Check a Website Link
+    </button>
+    <button class="tab-btn" data-target="tab-monitor">
+      🛡️ Live Device Monitor
+    </button>
+    <button class="tab-btn" data-target="tab-vault" id="tab-btn-vault">
+      🚩 Marked Scams <span class="tab-badge" id="vault-badge-tab">0</span>
+    </button>
+    <button class="tab-btn" data-target="tab-report">
+      🚨 File Cyber Complaint
+    </button>
+    <button class="tab-btn" data-target="tab-awareness">
+      🎓 Scam Quiz & Tips
+    </button>
+  </div>
+
+  <!-- Main Content Areas -->
+  <main>
+
+    <!-- Top Friendly Welcome Hero Card -->
+    <div class="hero-welcome-card">
+      <div class="hero-welcome-info">
+        <h2>🛡️ You & Your Family Are Protected</h2>
+        <p>Paste any suspicious message, check a fake police/bank call, or verify a website link before you trust it.</p>
+      </div>
+      <div class="hero-welcome-badge">
+        <span>🛡️ AI Sentinel Ready</span>
+      </div>
+    </div>
+
+    <!-- 3 Big 1-Tap Quick Action Tiles -->
+    <div class="quick-tiles-grid">
+      <div class="quick-tile" onclick="switchTab('tab-msg')">
+        <div>
+          <div class="quick-tile-header">
+            <div class="quick-tile-icon">💬</div>
+            <div class="quick-tile-title">Check a Message</div>
+          </div>
+          <div class="quick-tile-desc">Got a text about electricity cutoff, lottery prize, or YouTube job? Check here.</div>
+        </div>
+        <div class="quick-tile-btn">Scan Message ➔</div>
+      </div>
+
+      <div class="quick-tile" onclick="switchTab('tab-call')">
+        <div>
+          <div class="quick-tile-header">
+            <div class="quick-tile-icon">📞</div>
+            <div class="quick-tile-title">Check a Phone Call</div>
+          </div>
+          <div class="quick-tile-desc">Did someone call claiming to be Police, CBI, Courier, or Bank Manager? Speak or paste.</div>
+        </div>
+        <div class="quick-tile-btn">Scan Call ➔</div>
+      </div>
+
+      <div class="quick-tile" onclick="switchTab('tab-url')">
+        <div>
+          <div class="quick-tile-header">
+            <div class="quick-tile-icon">🌐</div>
+            <div class="quick-tile-title">Check a Website Link</div>
+          </div>
+          <div class="quick-tile-desc">Received a link to update PAN card, pay a bill, or claim rewards? Verify first.</div>
+        </div>
+        <div class="quick-tile-btn">Scan Link ➔</div>
+      </div>
+    </div>
+
+    <!-- TAB 1: MESSAGE & SMS SCAM SCANNER (DEFAULT FIRST TAB) -->
+    <section id="tab-msg" class="tab-panel active">
+      <div class="grid-layout">
+        
+        <!-- Input Area -->
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">💬 SMS & WhatsApp Message Checker</div>
+            <div class="card-subtitle">Paste any incoming message below to instantly detect fake electricity cutoff threats, job scams, and phishing links.</div>
+          </div>
+
+          <label style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem; font-weight: 600;">
+            Try Sample Scams (Tap to test):
+          </label>
+          <div class="presets-bar" id="msg-presets"></div>
+
+          <textarea id="message-input" rows="7" placeholder="Paste incoming SMS, WhatsApp message, or email here... (e.g. 'Your electricity will be cut off tonight at 9:30 PM')"></textarea>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="analyzeMessageInput()">
+              🔎 Check This Message
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('message-input').value='';">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">📊 Safety Assessment</div>
+            <div class="card-subtitle">Instant verdict on whether this message is safe or dangerous</div>
+          </div>
+
+          <div class="results-container">
+            <div class="meter-card">
+              <div class="score-display">
+                <span class="score-number severity-safe" id="msg-score-num">0</span>
+                <span class="score-denom">/100</span>
+              </div>
+              <div class="threat-badge severity-safe-bg" id="msg-score-badge">READY TO SCAN</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" id="msg-progress-bar"></div>
+              </div>
+            </div>
+
+            <div class="action-box">
+              <h5>💡 What You Should Do</h5>
+              <p id="msg-action-text">Paste any message and tap 'Check This Message' to get an instant safety rating.</p>
+            </div>
+
+            <div>
+              <div style="font-size: 0.86rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);">
+                Red Flags Found:
+              </div>
+              <div class="findings-list" id="msg-findings">
+                <div class="finding-item safe">
+                  <div class="finding-title">Scanner Ready</div>
+                  <div class="finding-desc">No message checked yet.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary" onclick="markCurrentScanAsScam('msg')" id="btn-mark-msg-scam" style="border-color: rgba(239, 68, 68, 0.4); color: #ff6b6b;">
+                🚩 Mark as Scam & Save
+              </button>
+              <button class="btn btn-secondary" onclick="openShareModal()">
+                📲 Warn Family
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: CALL SCAM GUARDIAN -->
+    <section id="tab-call" class="tab-panel">
+      <div class="grid-layout">
+        
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">📞 Scam Call Checker & Voice Detector</div>
+            <div class="card-subtitle">Detects 'Digital Arrest' intimidation, fake police/CBI calls, courier seized parcel threats, and bank manager OTP demands.</div>
+          </div>
+
+          <label style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem; font-weight: 600;">
+            Try Sample Calls (Tap to test):
+          </label>
+          <div class="presets-bar" id="call-presets"></div>
+
+          <textarea id="call-transcript-input" rows="7" placeholder="Type what the caller said, or tap '🎙️ Speak Call' to use your phone's microphone..."></textarea>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="analyzeCallTranscript()">
+              ⚡ Check This Call
+            </button>
+            <button class="btn btn-mic" id="mic-record-btn" onclick="toggleLiveSpeech()">
+              🎙️ Speak Call
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('call-transcript-input').value='';">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">📊 Caller Threat Rating</div>
+            <div class="card-subtitle">Psychological intimidation and extortion breakdown</div>
+          </div>
+
+          <div class="results-container">
+            <div class="meter-card">
+              <div class="score-display">
+                <span class="score-number severity-safe" id="call-score-num">0</span>
+                <span class="score-denom">/100</span>
+              </div>
+              <div class="threat-badge severity-safe-bg" id="call-score-badge">READY TO SCAN</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" id="call-progress-bar"></div>
+              </div>
+            </div>
+
+            <div class="action-box">
+              <h5>💡 What You Should Do</h5>
+              <p id="call-action-text">Remember: Real Police, CBI, or Courts NEVER conduct digital arrests over video calls.</p>
+            </div>
+
+            <div>
+              <div style="font-size: 0.86rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);">
+                Intimidation Tactics Flagged:
+              </div>
+              <div class="findings-list" id="call-findings">
+                <div class="finding-item safe">
+                  <div class="finding-title">System Ready</div>
+                  <div class="finding-desc">Awaiting call speech or text.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: URL & WEBSITE PHISHING SHIELD -->
+    <section id="tab-url" class="tab-panel">
+      <div class="grid-layout">
+        
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">🌐 Fake Website & Phishing Link Scanner</div>
+            <div class="card-subtitle">Checks if a website is a fake copy designed to steal your bank password or credit card details.</div>
+          </div>
+
+          <label style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem; font-weight: 600;">
+            Try Sample Links:
+          </label>
+          <div class="presets-bar" id="url-presets"></div>
+
+          <input type="text" id="url-input" placeholder="e.g. http://sbi-login-portal-auth.xyz or http://185.193.125.44/verify">
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="analyzeUrlInput()">
+              🔍 Scan Website Link
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('url-input').value='';">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">🛡️ Website Safety Verdict</div>
+            <div class="card-subtitle">Lookalike domain inspection and credential theft checks</div>
+          </div>
+
+          <div class="results-container">
+            <div class="meter-card">
+              <div class="score-display">
+                <span class="score-number severity-safe" id="url-score-num">0</span>
+                <span class="score-denom">/100</span>
+              </div>
+              <div class="threat-badge severity-safe-bg" id="url-score-badge">READY TO SCAN</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" id="url-progress-bar"></div>
+              </div>
+            </div>
+
+            <div class="action-box">
+              <h5>💡 Safety Advisory</h5>
+              <p id="url-action-text">Enter any website link before clicking to verify its authenticity.</p>
+            </div>
+
+            <div>
+              <div style="font-size: 0.86rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);">
+                Technical Flags:
+              </div>
+              <div class="findings-list" id="url-findings">
+                <div class="finding-item safe">
+                  <div class="finding-title">No Active Scan</div>
+                  <div class="finding-desc">Waiting for URL target.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary" onclick="markCurrentScanAsScam('url')" id="btn-mark-url-scam" style="border-color: rgba(239, 68, 68, 0.4); color: #ff6b6b;">
+                🚩 Mark as Phishing Link & Save
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: REAL-TIME MONITORING & DEVICE PERMISSIONS -->
+    <section id="tab-monitor" class="tab-panel">
+      <div class="grid-layout">
+        
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">🛡️ Real-Time Device Protection & Permissions</div>
+            <div class="card-subtitle">ScamGuard can monitor calls and messages in the background to automatically protect your phone.</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.25rem;">
+            <div class="perm-card">
+              <div class="perm-info">
+                <div class="perm-icon">📞</div>
+                <div>
+                  <div class="perm-name">Incoming Call Sentinel</div>
+                  <div class="perm-desc">Listens for spoofed numbers and Digital Arrest threat keywords.</div>
+                </div>
+              </div>
+              <span class="perm-badge active" id="perm-phone-badge">ACTIVE</span>
+            </div>
+
+            <div class="perm-card">
+              <div class="perm-info">
+                <div class="perm-icon">💬</div>
+                <div>
+                  <div class="perm-name">SMS & Message Fraud Interceptor</div>
+                  <div class="perm-desc">Auto-scans incoming SMS to block fake bill cutoff threats and bad links.</div>
+                </div>
+              </div>
+              <span class="perm-badge active" id="perm-sms-badge">ACTIVE</span>
+            </div>
+
+            <div class="perm-card">
+              <div class="perm-info">
+                <div class="perm-icon">🎙️</div>
+                <div>
+                  <div class="perm-name">In-Call Voice Heuristics</div>
+                  <div class="perm-desc">Detects OTP extraction demands during active calls.</div>
+                </div>
+              </div>
+              <span class="perm-badge active" id="perm-audio-badge">ACTIVE</span>
+            </div>
+
+            <div class="perm-card">
+              <div class="perm-info">
+                <div class="perm-icon">📳</div>
+                <div>
+                  <div class="perm-name">Emergency Panic Alerts & Haptics</div>
+                  <div class="perm-desc">Vibrates the phone motor and pushes warning banners on severe scams.</div>
+                </div>
+              </div>
+              <span class="perm-badge active" id="perm-notify-badge">ACTIVE</span>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="requestSystemPermissions()">
+              🛡️ Enable Active Device Protection
+            </button>
+            <button class="btn btn-secondary" onclick="toggleActiveMonitoring()" id="btn-toggle-monitor">
+              ⏸️ Pause Shield
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title">📡 Live Interceptor Radar</div>
+            <div class="card-subtitle">Real-time background surveillance feed</div>
+          </div>
+
+          <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid var(--accent-cyan); border-radius: 12px; padding: 0.9rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <div class="live-dot"></div>
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-cyan);" id="radar-status-text">SURVEILLANCE RADAR ACTIVE</span>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--text-muted);" id="radar-timestamp">Protecting phone</span>
+          </div>
+
+          <label style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem; font-weight: 600;">
+            Test Real-Time Interception (Tap to test):
+          </label>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
+            <button class="preset-chip" style="text-align: left; padding: 0.55rem 0.85rem;" onclick="simulateInterceptedSms()">
+              💬 <strong>Test Inbound SMS Scam:</strong> Electricity Cutoff Threat <em>(Triggers Alarm & Heads-up Pop-up)</em>
+            </button>
+            <button class="preset-chip" style="text-align: left; padding: 0.55rem 0.85rem;" onclick="simulateSmsPhishingLink()">
+              🌐 <strong>Test SMS with Phishing Link:</strong> Fake SBI KYC Update <em>(Triggers Alarm & Heads-up Pop-up)</em>
+            </button>
+            <button class="preset-chip" style="text-align: left; padding: 0.55rem 0.85rem;" onclick="simulateClipboardScan()">
+              📋 <strong>Test Auto-Clipboard Scan:</strong> Copied Fraud Link from WhatsApp <em>(Triggers Pop-up)</em>
+            </button>
+            <button class="preset-chip" style="text-align: left; padding: 0.55rem 0.85rem;" onclick="simulateInterceptedCall()">
+              📞 <strong>Test Inbound Call Scam:</strong> Fake CBI Digital Arrest Impersonation
+            </button>
+          </div>
+
+          <div>
+            <div style="font-size: 0.86rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);">
+              Live Interceptor Log:
+            </div>
+            <div class="findings-list" id="interceptor-log-list" style="max-height: 220px; overflow-y: auto;">
+              <div class="finding-item safe">
+                <div class="finding-title">🟢 Shield Active</div>
+                <div class="finding-desc">Ready to intercept background calls and SMS messages.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: OFFICIAL CYBERCRIME REPORT DRAFTER -->
+    <section id="tab-report" class="tab-panel">
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title">🚨 Formal Cybercrime Complaint Drafter</div>
+          <div class="card-subtitle">Automatically formats an official report for National Cyber Helpline 1930 and cybercrime.gov.in.</div>
+        </div>
+
+        <div class="complaint-box" id="complaint-text">Click "Generate Cybercrime Report" after checking any call or message, or generate one now.</div>
+
+        <div class="button-group" style="margin-top: 1.25rem;">
+          <button class="btn btn-primary" onclick="copyReport()">
+            📋 Copy Complaint Text
+          </button>
+          <button class="btn btn-secondary" onclick="shareReportToAndroid()">
+            📲 Share to WhatsApp / SMS
+          </button>
+          <a href="https://cybercrime.gov.in" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
+            🔗 Open Cybercrime Portal
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: AWARENESS & QUIZ -->
+    <section id="tab-awareness" class="tab-panel">
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <div>
+          <h2 style="font-size: 1.35rem; margin-bottom: 0.4rem; color: var(--accent-cyan);">
+            📚 Most Common Digital Scams Today
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Learn how fraudsters trick people into transferring money and how to protect yourself.
+          </p>
+          <div class="case-grid" id="case-studies-container"></div>
+        </div>
+
+        <div>
+          <h2 style="font-size: 1.35rem; margin-bottom: 0.4rem; color: var(--accent-cyan);">
+            🎯 "Spot The Scam" Readiness Quiz
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Test your knowledge! Can you spot the fraud in these real-world scenarios?
+          </p>
+          <div id="quiz-container"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: MARKED SCAM MESSAGES & PHISHING VAULT -->
+    <section id="tab-vault" class="tab-panel">
+      <div class="glass-card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; width: 100%;">
+            <div>
+              <div class="card-title">🚩 Marked Scam Messages & Phishing Vault</div>
+              <div class="card-subtitle">All intercepted scams marked by ScamGuard or flagged by you are safely quarantined here.</div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary" onclick="exportMarkedScams()" style="padding: 0.45rem 0.85rem; font-size: 0.8rem;">
+                📥 Export Evidence
+              </button>
+              <button class="btn btn-secondary" onclick="clearScamVault()" style="padding: 0.45rem 0.85rem; font-size: 0.8rem; color: #ff6b6b; border-color: rgba(239, 68, 68, 0.4);">
+                🗑️ Clear Vault
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="vault-stats-bar">
+          <div class="vault-stat-card">
+            <div class="vault-stat-num" id="stat-total-marked">0</div>
+            <div class="vault-stat-label">Total Scams Marked</div>
+          </div>
+          <div class="vault-stat-card">
+            <div class="vault-stat-num" id="stat-sms-marked" style="color: var(--accent-amber);">0</div>
+            <div class="vault-stat-label">Scam Messages</div>
+          </div>
+          <div class="vault-stat-card">
+            <div class="vault-stat-num" id="stat-links-marked" style="color: var(--accent-cyan);">0</div>
+            <div class="vault-stat-label">Phishing Links</div>
+          </div>
+          <div class="vault-stat-card">
+            <div class="vault-stat-num" id="stat-calls-marked" style="color: var(--accent-purple);">0</div>
+            <div class="vault-stat-label">Scam Calls</div>
+          </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+          <button class="preset-chip active" id="filter-all" onclick="filterVault('all')">All Marked</button>
+          <button class="preset-chip" id="filter-sms" onclick="filterVault('sms')">💬 Messages</button>
+          <button class="preset-chip" id="filter-links" onclick="filterVault('links')">🌐 Links</button>
+          <button class="preset-chip" id="filter-calls" onclick="filterVault('calls')">📞 Calls</button>
+        </div>
+
+        <!-- Vault Items Container -->
+        <div id="vault-items-container">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Dock Navigation (Thumb-friendly on Android) -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-item active" data-target="tab-msg">
+      <span class="nav-icon">💬</span>
+      <span>Message</span>
+    </button>
+    <button class="mobile-nav-item" data-target="tab-call">
+      <span class="nav-icon">📞</span>
+      <span>Call</span>
+    </button>
+    <button class="mobile-nav-item" data-target="tab-url">
+      <span class="nav-icon">🌐</span>
+      <span>Link</span>
+    </button>
+    <button class="mobile-nav-item" data-target="tab-monitor">
+      <span class="nav-icon">🛡️</span>
+      <span>Monitor</span>
+    </button>
+    <button class="mobile-nav-item" data-target="tab-vault">
+      <span class="nav-icon">🚩</span>
+      <span>Scams</span>
+    </button>
+    <button class="mobile-nav-item" data-target="tab-awareness">
+      <span class="nav-icon">🎓</span>
+      <span>Quiz</span>
+    </button>
+  </nav>
+
+  <!-- Urgent Heads-Up Emergency Pop-Up Alert Modal -->
+  <div class="scam-popup-overlay" id="scam-popup-modal">
+    <div class="scam-popup-card">
+      <div class="scam-popup-header">
+        <div class="scam-siren-icon">🚨</div>
+        <div>
+          <div class="scam-popup-title">SCAM THREAT DETECTED!</div>
+          <div class="scam-popup-subtitle">ScamGuard Automatic Background Sentinel</div>
+        </div>
+      </div>
+
+      <div class="scam-source-pill" id="popup-source-pill">
+        <span>💬 Intercepted Inbound SMS</span>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+        <span class="threat-badge severity-danger-bg" id="popup-threat-badge" style="margin-top: 0;">
+          🔴 DANGEROUS SCAM (95/100)
+        </span>
+        <span style="font-size: 0.75rem; color: #ff6b6b; font-weight: 800;">
+          [MARKED AS SCAM 🚩]
+        </span>
+      </div>
+
+      <div class="scam-quote-box" id="popup-message-body">
+        "Dear consumer, your electricity power will be disconnected tonight at 9:30 PM..."
+      </div>
+
+      <div class="scam-why-box" id="popup-why-box">
+        💡 <strong>Why this is fake:</strong> Power companies never send personal mobile texts with sudden disconnection deadlines.
+      </div>
+
+      <div class="scam-popup-actions">
+        <button class="btn-mark-danger" onclick="confirmScamFromPopup()">
+          🚩 Saved to Marked Scams Vault
+        </button>
+        <button class="btn btn-primary" onclick="popupDraftComplaint()" style="background: linear-gradient(135deg, #00f0ff 0%, #0088ff 100%); color: #051329;">
+          🚨 File 1930 Cybercrime Complaint
+        </button>
+        <button class="btn btn-secondary" onclick="closeScamPopup()" style="border-color: rgba(255,255,255,0.2);">
+          ✕ Dismiss Warning
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share with Family & Friends Modal -->
+  <div class="modal-overlay" id="share-modal">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeShareModal()">&times;</button>
+      <div style="font-size: 2.2rem; margin-bottom: 0.35rem;">🛡️</div>
+      <h3 style="color: #ffffff; font-size: 1.3rem; margin-bottom: 0.4rem;">
+        Share ScamGuard with Family & Friends
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45;">
+        Protect your parents, relatives, and friends from fake CBI police calls and electricity cutoff messages!
+      </p>
+
+      <div class="qr-image-container">
+        <img id="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https%3A%2F%2Fwell-fan-dgo55.ship.place" alt="Scan to install ScamGuard">
+      </div>
+
+      <div class="mobile-url-box" id="mobile-url-text">
+        https://well-fan-dgo55.ship.place
+      </div>
+
+      <div class="share-action-buttons">
+        <a id="btn-whatsapp-share" href="#" target="_blank" class="btn-whatsapp-large" onclick="shareViaWhatsAppDirect()">
+          <span style="font-size: 1.3rem;">💬</span> Share on WhatsApp
+        </a>
+        <button class="btn btn-secondary" onclick="copyShareLink()">
+          📋 Copy Link to Clipboard
+        </button>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem; margin-top: 1rem; font-size: 0.78rem; color: var(--text-muted); text-align: left;">
+        <strong>📱 How other phones install it in 10 seconds:</strong><br>
+        1. Open the link in Chrome on their phone.<br>
+        2. Tap the 3 dots (⋮) in the top-right corner.<br>
+        3. Tap <strong>"Install App"</strong> or <strong>"Add to Home screen"</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    ScamGuard 360 Sentinel &copy; 2026 | Built to Protect Families & Citizens Against Cyber Fraud<br>
+    🚨 If you lost money to a scammer, immediately dial Citizen Financial Fraud Helpline <strong>1930</strong>.
+  </footer>
+
+  <!-- Offline & Android Detector Engine -->
+  <script src="js/detectors_engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
